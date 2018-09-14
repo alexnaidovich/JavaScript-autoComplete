@@ -37,7 +37,6 @@ var autoComplete = (function(){
             offsetTop: 1,
             cache: 1,
             menuClass: '',
-            selectorToInsert: 0,
             renderItem: function (item, search){
                 // escape special characters
                 search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -83,12 +82,7 @@ var autoComplete = (function(){
                 }
             }
             addEvent(window, 'resize', that.updateSC);
-
-            if (o.selectorToInsert && o.selectorToInsert instanceof HTMLElement) {
-                o.selectorToInsert.appendChild(that.sc);
-            } else {
-                document.body.appendChild(that.sc);
-            }
+            document.body.appendChild(that.sc);
 
             live('autocomplete-suggestion', 'mouseleave', function(e){
                 var sel = that.sc.querySelector('.autocomplete-suggestion.selected');
@@ -210,16 +204,7 @@ var autoComplete = (function(){
                     that.setAttribute('autocomplete', that.autocompleteAttr);
                 else
                     that.removeAttribute('autocomplete');
-                try {
-                    if (o.selectorToInsert && o.selectorToInsert.querySelector(elems[i])) {
-                        o.selectorToInsert.removeChild(that.sc);
-                    } else {
-                        document.body.removeChild(that.sc);
-                    }
-                } catch (error) {
-                    console.log('Destroying error: can\'t fild target selector', error);
-                    throw error;
-                }
+                document.body.removeChild(that.sc);
                 that = null;
             }
         };
